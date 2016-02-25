@@ -4,7 +4,7 @@
 waterfaller.py
 
 Make waterfall plots to show frequency sweep of a single pulse.
-Reads psrfits and SIGPROC filterbank format.
+Reads SIGPROC filterbank format.
 
 Patrick Lazarus - Aug. 19, 2011
 
@@ -22,7 +22,7 @@ import psr_utils
 import rfifind
 
 from sp_pulsar.formats import psrfits
-from pypulsar.formats import filterbank
+#from pypulsar.formats import filterbank
 from sp_pulsar.formats import spectra
 
 SWEEP_STYLES = ['r-', 'b-', 'g-', 'm-', 'c-']
@@ -46,9 +46,10 @@ def get_mask(rfimask, startsamp, N):
     mask = np.zeros((N, rfimask.nchan), dtype='bool')
     for blocknum in np.unique(blocknums):
         blockmask = np.zeros_like(mask[blocknums==blocknum])
-        blockmask[:,rfimask.mask_zap_chans_per_int[blocknum]] = True
+        if len(rfimask.mask_zap_chans_per_int[blocknum]):
+            blockmask[:,rfimask.mask_zap_chans_per_int[blocknum]] = True
         mask[blocknums==blocknum] = blockmask
-    return mask.T[::-1]
+    return mask.T
         
 def maskfile(data, start_bin, nbinsextra):
     if options.maskfile is not None:
@@ -90,11 +91,11 @@ def waterfall(start_bin, dmfac, duration, nbins, zerodm, nsub, subdm, dm, integr
     return data, nbinsextra
 def main():
     fn = args[0]
-    if fn.endswith(".fil"):
-        # Filterbank file
-        filetype = "filterbank"
-        rawdatafile = filterbank.filterbank(fn)
-    elif fn.endswith(".fits"):
+    #if fn.endswith(".fil"):
+    #    # Filterbank file
+    #    filetype = "filterbank"
+    #    rawdatafile = filterbank.filterbank(fn)
+    if fn.endswith(".fits"):
         # PSRFITS file
         filetype = "psrfits"
         rawdatafile = psrfits.PsrfitsFile(fn)
