@@ -1,1 +1,1 @@
-__all__ = ["psrfits"]
+__all__ = ["formats"]

@@ -23,7 +23,6 @@ from time import strftime
 import infodata
 from subprocess import Popen, PIPE, call
 import numpy as np
-import math as m
 import optparse
 import waterfaller
 import sp_utils
